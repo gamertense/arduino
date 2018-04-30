@@ -35,65 +35,54 @@ void setonoff(byte state) {
 
 void loop() {
   // Ping the Left eye with a recursion of 5
-  distance1 = eyeL.ping_median( 5 );
-  Serial.print("dis1 = ");
-  Serial.println(distance1);
-  // Delay 500ms before we ping the right eye, so we don't get conflicting results
-  delay(500);
-  // Ping the Right eye with recursion of 5
-  distance2 = eyeR.ping_median( 5 );
-  Serial.print("dis2 = ");
-  Serial.println(distance2);
+ distance1 = eyeL.ping_median( );
+ Serial.print("dis1 = ");
+ Serial.println(distance1);
+ // Delay 500ms before we ping the right eye, so we don't get conflicting results
+ // delay(10);
+ // Ping the Right eye with recursion of 5
+ distance2 = eyeR.ping_median( );
+ Serial.print("dis2 = ");
+ Serial.println(distance2);
 
   float difference = ( distance2 - distance1 );
-  if ( abs( difference ) < 250 || (distance1 == 0 && distance2 == 0 ) )
-  {
-    closeEye();
-    currentState = 0;
-  }
+  // if ( abs( difference ) < 250 || (distance1 == 0 && distance2 == 0 ) )
+  // {
+  //   closeEye();
+  //   currentState = 0;
+  // }
   // Now if distance1 is greater than distance2 and distance1 is also greater than 0, then we want to look right
-  else if ( distance2 < distance1 && distance1 > 0)
+  if ( distance2 < distance1 && distance1 > 0)
   {
-    delay(10);
-    count += 1;
-    if ((count <= 100) && (trig == 0))
-    { if (count == 100) {
-        trig = 1;
-        count = 0;
-      }
-      ShowEye_Right();
-    }
-    currentState = 1;
   }
   // Now if distance2 is greater than distance1 and distance2 is also greater than 0, then we want to look left
   else if ( distance1 < distance2 && distance2 > 0 )
   {
-    delay(10);
-    count += 1;
-    if ((count <= 100) && (trig == 0))
-    { if (count == 100) {
-        trig = 1;
-        count = 0;
-      }
-      ShowEye_Left();
-    }
     currentState = 2;
   }
 
   // delay the loop for 250ms to ensure the eyes have time to display correctly
-  delay(250);
+  //  delay(250);
 
-  //OLD
-  //  if ((count <= 20) && (trig == 1))
-  //  { if (count == 20) {
-  //      trig = 0;
-  //      count = 0;
-  //
-  //    }
-  //    closeEye();
-  //  }
+  count += 1;
+  if ((count <= 100) && (trig == 0))
+  { if (count == 100) {
+      trig = 1;
+      count = 0;
+
+    }
+    ShowEye_Left();
+  }
+  if ((count <= 20) && (trig == 1))
+  { if (count == 20) {
+      trig = 0;
+      count = 0;
+
+    }
+    closeEye();
+  }
+
 }
-
 void ShowEye_Left() {
   byte charactor[4]  =  {0b00000110,
                          0b00001101,
@@ -138,3 +127,7 @@ void closeEye() {
     digitalWrite(i + 6, HIGH);
   }
 }
+
+
+
+
